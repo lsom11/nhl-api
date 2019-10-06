@@ -5,6 +5,7 @@ from teams.controllers import teams_blueprint as teams
 from divisions.controllers import divisions_blueprint as divisions
 from conferences.controllers import conferences_blueprint as conferences
 from players.controllers import players_blueprint as players
+from games.controllers import games_blueprint as games
 
 from config import BaseConfig
 from config import configure_app
@@ -25,6 +26,7 @@ app.register_blueprint(teams, url_prefix='/api/v1/teams')
 app.register_blueprint(divisions, url_prefix='/api/v1/divisions')
 app.register_blueprint(conferences, url_prefix='/api/v1/conferences')
 app.register_blueprint(players, url_prefix='/api/v1/players')
+app.register_blueprint(games, url_prefix='/api/v1/games')
 
 
 if __name__ == '__main__':
