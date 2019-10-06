@@ -7,6 +7,9 @@ from conferences.controllers import conferences_blueprint as conferences
 from players.controllers import players_blueprint as players
 from games.controllers import games_blueprint as games
 from schedule.controllers import schedule_blueprint as schedule
+from seasons.controllers import seasons_blueprint as seasons
+from standings.controllers import standings_blueprint as standings
+from stats.controllers import stats_blueprint as stats
 
 from config import BaseConfig
 from config import configure_app
@@ -29,6 +32,9 @@ app.register_blueprint(conferences, url_prefix='/api/v1/conferences')
 app.register_blueprint(players, url_prefix='/api/v1/players')
 app.register_blueprint(games, url_prefix='/api/v1/games')
 app.register_blueprint(schedule, url_prefix='/api/v1/schedule')
+app.register_blueprint(seasons, url_prefix='/api/v1/seasons')
+app.register_blueprint(standings, url_prefix='/api/v1/standings')
+app.register_blueprint(stats, url_prefix='/api/v1/stats')
 
 
 if __name__ == '__main__':

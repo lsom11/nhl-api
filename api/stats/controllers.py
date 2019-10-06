@@ -4,17 +4,18 @@ import json
 import requests
 from requests import HTTPError
 
-players_blueprint = Blueprint('players', __name__)
+stats_blueprint = Blueprint('stats', __name__)
 
-URL = 'https://statsapi.web.nhl.com/api/v1/people'
-DRAFT_URL = 'https://statsapi.web.nhl.com/api/v1/draft'
-PROSPECTS_URL = 'https://statsapi.web.nhl.com/api/v1/draft/prospects'
+TEAM_STATS_URL = 'https://statsapi.web.nhl.com/api/v1/teams'
+PLAYER_STATS_URL = 'https://statsapi.web.nhl.com/api/v1/people/'
+AWARDS_URL = 'https://statsapi.web.nhl.com/api/v1/people/awards'
+STATS_TYPES_URL = 'https://statsapi.web.nhl.com/api/v1/statTypes'
 
 
-@players_blueprint.route('/draft', methods=['GET'])
-def get_draft():
+@stats_blueprint.route('/types', methods=['GET'])
+def get_stat_types(expanded):
     try:
-        r = requests.get(url=DRAFT_URL)
+        r = requests.get(url=STATS_TYPES_URL)
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:
@@ -22,14 +23,14 @@ def get_draft():
     else:
         res = json.loads(r.content)
         return {
-            'draft': res['drafs'],
+            'statTypes': res,
             'status_code': r.status_code
         }
 
-@players_blueprint.route('/draft/<draft_id>', methods=['GET'])
-def get_draft_by_year(draft_id):
+@stats_blueprint.route('/team/<team_id>', methods=['GET'])
+def get_team_stats(team_id):
     try:
-        r = requests.get(url=DRAFT_URL + '/' + draft_id)
+        r = requests.get(url=TEAM_STATS_URL + '/' + team_id + '/stats')
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:
@@ -37,14 +38,14 @@ def get_draft_by_year(draft_id):
     else:
         res = json.loads(r.content)
         return {
-            'draft': res['drafts'][0],
+            'stats': res['stats'],
             'status_code': r.status_code
         }
 
-@players_blueprint.route('/prospects', methods=['GET'])
-def get_prospects():
+@stats_blueprint.route('/player/<player_id>', methods=['GET'])
+def get_player_stats(player_id):
     try:
-        r = requests.get(url=PROSPECTS_URL)
+        r = requests.get(url=TEAM_STATS_URL + '/' + player_id + '/stats')
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:
@@ -52,15 +53,14 @@ def get_prospects():
     else:
         res = json.loads(r.content)
         return {
-            'players': res,
+            'stats': res['stats'],
             'status_code': r.status_code
         }
 
-
-@players_blueprint.route('/<player_id>', methods=['GET'])
-def get_player(player_id):
+@stats_blueprint.route('/awards', methods=['GET'])
+def get_awards():
     try:
-        r = requests.get(url=URL + '/' + player_id)
+        r = requests.get(url=AWARDS_URL)
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:
@@ -68,14 +68,14 @@ def get_player(player_id):
     else:
         res = json.loads(r.content)
         return {
-            'player': res['players'][0],
+            'awards': res,
             'status_code': r.status_code
         }
 
-@players_blueprint.route('/prospects/<player_id>', methods=['GET'])
-def get_prospect(player_id):
+@stats_blueprint.route('/awards/<award_id>', methods=['GET'])
+def get_award(award_id):
     try:
-        r = requests.get(url=PROSPECTS_URL + '/' + player_id)
+        r = requests.get(url=AWARDS_URL + '/' + award_id)
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:
@@ -83,6 +83,7 @@ def get_prospect(player_id):
     else:
         res = json.loads(r.content)
         return {
-            'prospect': res,
+            'award': res,
             'status_code': r.status_code
         }
+

@@ -7,14 +7,14 @@ from requests import HTTPError
 games_blueprint = Blueprint('games', __name__)
 
 URL = 'https://statsapi.web.nhl.com/api/v1/game'
-GAMETYPES_URL = 'https://statsapi.web.nhl.com/api/v1/gameTypes'
-PLAYTYPES_URL = 'https://statsapi.web.nhl.com/api/v1/playTypes'
+GAME_TYPES_URL = 'https://statsapi.web.nhl.com/api/v1/gameTypes'
+PLAY_TYPES_URL = 'https://statsapi.web.nhl.com/api/v1/playTypes'
 
 
 @games_blueprint.route('/gameTypes', methods=['GET'])
 def get_game_types():
     try:
-        r = requests.get(url=GAMETYPES_URL)
+        r = requests.get(url=GAME_TYPES_URL)
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:
@@ -27,9 +27,9 @@ def get_game_types():
         }
 
 @games_blueprint.route('/playTypes', methods=['GET'])
-def get_game_types():
+def get_play_types():
     try:
-        r = requests.get(url=PLAYTYPES_URL)
+        r = requests.get(url=PLAY_TYPES_URL)
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:
@@ -88,9 +88,9 @@ def get_linescore(game_id):
         }
 
 @games_blueprint.route('/<game_id>/content', methods=['GET'])
-def get_linescore(game_id):
+def get_content(game_id):
     try:
-        r = requests.get(url=URL + '/' + game_id + '/linescore')
+        r = requests.get(url=URL + '/' + game_id + '/content')
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:

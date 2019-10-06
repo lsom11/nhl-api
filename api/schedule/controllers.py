@@ -9,8 +9,8 @@ schedule_blueprint = Blueprint('schedule', __name__)
 URL = 'https://statsapi.web.nhl.com/api/v1/schedule'
 
 
-@schedule_blueprint.route('/todays_schedule', methods=['GET'])
-def get_todays_schedule():
+@schedule_blueprint.route('/', methods=['GET'])
+def get_schedule():
     try:
         r = requests.get(url=URL)
     except HTTPError as http_err:
