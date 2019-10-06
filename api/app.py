@@ -4,6 +4,7 @@ from flask_cors import CORS
 from teams.controllers import teams_blueprint as teams
 from divisions.controllers import divisions_blueprint as divisions
 from conferences.controllers import conferences_blueprint as conferences
+from players.controllers import players_blueprint as players
 
 from config import BaseConfig
 from config import configure_app
@@ -23,6 +24,7 @@ configure_app(app)
 app.register_blueprint(teams, url_prefix='/api/v1/teams')
 app.register_blueprint(divisions, url_prefix='/api/v1/divisions')
 app.register_blueprint(conferences, url_prefix='/api/v1/conferences')
+app.register_blueprint(players, url_prefix='/api/v1/players')
 
 
 if __name__ == '__main__':
