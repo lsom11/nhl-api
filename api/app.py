@@ -2,6 +2,7 @@ from flask import Flask, url_for
 from flask_cors import CORS
 
 from teams.controllers import teams_blueprint as teams
+from divisions.controllers import divisions_blueprint as divisions
 
 from config import BaseConfig
 from config import configure_app
@@ -19,6 +20,7 @@ cors = CORS(app, resources={
 configure_app(app)
 
 app.register_blueprint(teams, url_prefix='/api/v1/teams')
+app.register_blueprint(divisions, url_prefix='/api/v1/divisions')
 
 
 if __name__ == '__main__':
