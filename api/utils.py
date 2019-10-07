@@ -1,6 +1,7 @@
-def url_builder(url, **kwargs):
-    api_url = url
-    for argument in kwargs:
-        if kwargs[argument]:
-            api_url = api_url + '?' + argument + '=' + kwargs[argument]
-    return url
+def url_query_builder(queryParams):
+    query = '?'
+    for queryParam in queryParams:
+        if queryParams[queryParam]:
+            query = query + '&' + queryParam + '=' + queryParams[queryParam]
+    if len(query) == 1: return ''
+    return query

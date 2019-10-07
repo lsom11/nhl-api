@@ -3,6 +3,8 @@ from flask import Blueprint, jsonify, request, make_response
 import json
 import requests
 from requests import HTTPError
+from utils import url_query_builder
+
 
 teams_blueprint = Blueprint('teams', __name__)
 
@@ -13,7 +15,9 @@ VENUES_URL = ' https://statsapi.web.nhl.com/api/v1/venues'
 @teams_blueprint.route('/', methods=['GET'])
 def get_teams():
     try:
-        r = requests.get(url=URL)
+        args = request.args.to_dict()
+        query = url_query_builder(args)
+        r = requests.get(url=URL + query)
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:
@@ -59,7 +63,9 @@ def get_stadium(stadium_id):
 @teams_blueprint.route('/<team_id>', methods=['GET'])
 def get_team(team_id):
     try:
-        r = requests.get(url=URL + '/' + team_id)
+        args = request.args.to_dict()
+        query = url_query_builder(args)
+        r = requests.get(url=URL + '/' + team_id + query)
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:

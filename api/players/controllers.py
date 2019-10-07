@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, request, make_response
+from utils import url_query_builder
 
 import json
 import requests
@@ -60,7 +61,9 @@ def get_prospects():
 @players_blueprint.route('/<player_id>', methods=['GET'])
 def get_player(player_id):
     try:
-        r = requests.get(url=URL + '/' + player_id)
+        args = request.args.to_dict()
+        query = url_query_builder(args)
+        r = requests.get(url=URL + '/' + player_id + query)
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:
