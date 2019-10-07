@@ -1,5 +1,6 @@
 from flask import Flask, url_for
 from flask_cors import CORS
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from teams.controllers import teams_blueprint as teams
 from divisions.controllers import divisions_blueprint as divisions
@@ -18,6 +19,17 @@ import os.path
 
 app = Flask(__name__)
 
+### swagger specific ###
+SWAGGER_URL = '/api/v1/docs'
+API_URL = '/static/swagger.yaml'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+    SWAGGER_URL,
+    API_URL,
+    config={
+        'app_name': "Nhl Api"
+    }
+)
+
 cors = CORS(app, resources={
     r'/api/v1/*': {
         'origins': BaseConfig.ORIGINS
@@ -26,6 +38,7 @@ cors = CORS(app, resources={
 
 configure_app(app)
 
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 app.register_blueprint(teams, url_prefix='/api/v1/teams')
 app.register_blueprint(divisions, url_prefix='/api/v1/divisions')
 app.register_blueprint(conferences, url_prefix='/api/v1/conferences')
@@ -38,4 +51,4 @@ app.register_blueprint(stats, url_prefix='/api/v1/stats')
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')

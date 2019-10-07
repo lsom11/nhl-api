@@ -1,0 +1,205 @@
+swagger: "2.0"
+info:
+  description: "NHL Api for my NHL Vis project"
+  version: "1.0.0"
+  title: "NHL Api"
+  contact:
+    email: "lucwsomers@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:5000"
+basePath: "/api/v1"
+tags:
+- name: "teams"
+  description: "Get information about teams or a team"
+- name: "players"
+  description: "Get information about players or a player"
+- name: "standings"
+  description: "Get information about the current standings or specific standings"
+- name: "schedule"
+  description: "Get information about the current schedule or specific schedule"
+- name: "divisions"
+  description: "Get information about divisions"
+- name: "conferences"
+  description: "Get information about conferences"
+- name: "games"
+  description: "Get information about games or a specific game"
+- name: "stats"
+  description: "Get information about team or player statistics"
+
+schemes:
+- "https"
+- "http"
+paths:
+  /teams:
+    get:
+      tags:
+      - "teams"
+      summary: "Returns a list of all teams"
+      description: "Multiple status values can be provided in query params"
+      operationId: "getTeams"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "expand"
+        in: "query"
+        description: "Return expanded team information"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+          enum:
+          - "team.roster"
+          - "person.names"
+          - "team.schedule.next"
+          - "team.schedule.previous"
+          - "team.stats"
+      - name: "stats"
+        in: "query"
+        description: "Specify which stats to get"
+        required: false
+        type: "string"
+      - name: "season"
+        in: "query"
+        description: "Specify which season to get"
+        required: false
+        type: "string"
+      - name: "teamId"
+        in: "query"
+        description: "IDs of teams to get"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Team"
+  /teams/{teamId}:
+    get:
+      tags:
+      - "teams"
+      summary: "Returns a single team"
+      description: "Multiple status values can be provided in query params"
+      operationId: "getTeam"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "teamId"
+        in: "path"
+        description: "ID of team to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "expand"
+        in: "query"
+        description: "Return expanded team information"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+          enum:
+          - "team.roster"
+          - "person.names"
+          - "team.schedule.next"
+          - "team.schedule.previous"
+          - "team.stats"
+      - name: "stats"
+        in: "query"
+        description: "Specify which stats to get"
+        required: false
+        type: "string"
+      - name: "season"
+        in: "query"
+        description: "Specify which season to get"
+        required: false
+        type: "string"
+      - name: "teamId"
+        in: "query"
+        description: "IDs of teams to get"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+              $ref: "#/definitions/Team"
+definitions:
+  Team:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      link:
+        type: "string"
+      venue:
+        type: "object"
+        items:
+          $ref: "#/definitions/Venue"
+      abbreviation:
+        type: "string"
+      teamName:
+        type: "string"
+      locationName:
+        type: "string"
+      firstYearOfPlay:
+        type: "string"
+      division:
+        type: "object"
+        items:
+          $ref: "#/definitions/GenericTeamObject"
+      conference:
+        type: "object"
+        items:
+          $ref: "#/definitions/GenericTeamObject"
+      franchise:
+        type: "object"
+        items:
+          $ref: "#/definitions/GenericTeamObject"
+      shortName:
+        type: "string"
+      officialSiteUrl:
+        type: "string"
+      franchiseId:
+        type: "integer"
+      active:
+        type: "boolean"
+  Venue:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      link:
+        type: "string"
+      city:
+        type: "string"
+      timeZone:
+        type: "object"
+        items:
+          $ref: "#/definitions/TimeZone"
+  TimeZone:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      offset:
+        type: "integer"
+      tz:
+        type: "string"
+  GenericTeamObject:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      link:
+        type: "string"
