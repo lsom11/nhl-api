@@ -70,8 +70,9 @@ def get_player(player_id):
         print(f'Other error occurred: {err}')
     else:
         res = json.loads(r.content)
+        print(res)
         return {
-            'player': res['players'][0],
+            'player': res,
             'status_code': r.status_code
         }
 
