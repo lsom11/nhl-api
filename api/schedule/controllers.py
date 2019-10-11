@@ -14,8 +14,8 @@ URL = 'https://statsapi.web.nhl.com/api/v1/schedule'
 def get_schedule():
     try:
         args = request.args.to_dict()
-        query = url_query_builder(args + query)
-        r = requests.get(url=URL)
+        query = url_query_builder(URL + args)
+        r = requests.get(url=query)
     except HTTPError as http_err:
         print(f'HTTP error occurred: {http_err}')
     except Exception as err:

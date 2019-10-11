@@ -130,6 +130,126 @@ paths:
           description: "Successful"
           schema:
               $ref: "#/definitions/Team"
+  /divisions:
+    get:
+      tags:
+      - "divisions"
+      summary: "Returns informations for all divisions"
+      description: "Multiple status values can be provided in query params"
+      operationId: "getDivisions"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Division"
+  /divisions/{divisionId}:
+    get:
+      tags:
+      - "divisions"
+      summary: "Returns a single division"
+      description: "Multiple status values can be provided in query params"
+      operationId: "getDivision"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "divisionId"
+        in: "path"
+        description: "ID of division to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            $ref: "#/definitions/Division"
+  /conferences:
+    get:
+      tags:
+      - "conferences"
+      summary: "Returns informations for all conferences"
+      description: "Multiple status values can be provided in query params"
+      operationId: "getConferences"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Conference"
+  /conferences/{conferenceId}:
+    get:
+      tags:
+      - "conferences"
+      summary: "Returns a single conference"
+      description: "Multiple status values can be provided in query params"
+      operationId: "getConference"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "conferenceId"
+        in: "path"
+        description: "ID of conference to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+              $ref: "#/definitions/Conference"
+  /schedule:
+    get:
+      tags:
+      - "schedule"
+      summary: "Returns the schedule with provided params"
+      description: "Multiple status values can be provided in query params"
+      operationId: "getSchedule"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "expand"
+        in: "query"
+        description: "Return expanded schedule information"
+        required: false
+        type: "array"
+        items:
+          type: "string"
+          enum:
+          - "schedule.broadcasts"
+          - "schedule.linescore"
+          - "schedule.ticket"
+      - name: "startDate"
+        in: "query"
+        description: "Specify which start date to get schedule"
+        type: "string"
+      - name: "endDate"
+        in: "query"
+        description: "Specify which end date to get schedule"
+        type: "string"
+      - name: "date"
+        in: "query"
+        description: "Specify which date to get schedule"        
+        required: false
+        type: "string"
+      - name: "teamId"
+        in: "query"
+        description: "ID of team to get"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Schedule"
 definitions:
   Team:
     type: "object"
@@ -203,3 +323,162 @@ definitions:
         type: "string"
       link:
         type: "string"
+  Division:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      link:
+        type: "string"
+      abbreviation:
+        type: "string"
+      conference:
+        type: "object"
+        items:
+          $ref: "#/definitions/GenericTeamObject"
+      active:
+        type: "boolean"
+  Conference:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      name:
+        type: "string"
+      link:
+        type: "string"
+      abbreviation:
+        type: "string"
+      shortname:
+        type: "string"
+      active:
+        type: "boolean"
+  Schedule:
+    type: "object"
+    properties:
+      copyright:
+        type: "string"
+      totalItems:
+        type: "integer"
+      totalEvents:
+        type: "integer"
+      totalGames:
+        type: "integer"
+      totalMatches:
+        type: "integer"    
+      wait:
+        type: "integer"
+      dates:
+        type: "array"
+        items:
+          $ref: "#/definitions/ScheduleDate"
+      events:
+        type: "array"
+        items:
+          type: "string"
+      matches:
+        type: "array"
+        items:
+          type: "string"
+  ScheduleDate:
+    type: "object"
+    properties:
+      date:
+        type: "string"
+      totalItems:
+        type: "integer"
+      totalEvents:
+        type: "integer"
+      totalGames:
+        type: "integer"
+      totalMatches:
+        type: "integer"
+      games:
+        type: "array"
+        items:
+          properties:
+            game:
+              type: "object"
+              items:
+                $ref: "#/definitions/ScheduleGame"
+      teams:
+        type: "object"
+        items:
+          properties:
+            away:
+              type: "object"
+              items: 
+                $ref: "#/definitions/ScheduleTeam"
+            home:
+              type: "object"
+              items: 
+                $ref: "#/definitions/ScheduleTeam"
+      venue:
+        type: "object"
+        properties:
+          name:
+            type: "string"
+          link:
+            type: "string"
+      content:
+        type: "object"
+        properties:
+          link:
+            type: "string"    
+  ScheduleGame:
+    type: "object"
+    properties:
+      gamePk:
+        type: "string"
+      link:
+        type: "string"
+      gameType:
+        type: "string"
+      season:
+        type: "string"
+      gameDate:
+        type: "string" 
+      status:
+        type: "object"
+        items:
+          $ref: "#/definitions/ScheduleGameStatus"
+  ScheduleGameStatus:
+    type: "object"
+    properties:
+      abstractGameState:
+        type: "string"
+      codedGameState:
+        type: "string"
+      detailedState:
+        type: "string"
+      statusCode:
+        type: "string"
+      startTimeTBD:
+        type: "string"
+  ScheduleTeam:
+    type: "object"
+    properties:
+      leagueRecord:
+        type: "object"
+        properties:
+          wins:
+            type: "integer"
+          losses:
+            type: "integer"
+          ot:
+            type: "integer"
+          type:
+            type: "string"
+      score:
+        type: "integer"
+      team:
+        type: "object"
+        properties:
+          id:
+            type: "integer"
+          name:
+            type: "string"
+          link:
+            type: "string"
